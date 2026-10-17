@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Odisea de la Iglesia en México</title>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;0,800;1,400&family=Marcellus&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--n0:#0b0820;--n1:#1a1240;--n2:#2b1d5c;--gold:#f0b73e;--gold-hi:#ffe08a;--gold-lo:#9b6c20;--ivory:#fbf1d9;--mist:#c3b6e0;--mist2:#9185b8;--ok:#5fd3a0;--bad:#ff8a7a;
+--serif:'Alegreya',Georgia,serif;--disp:'Marcellus',Georgia,serif;
+--e0:#d0742e;--e0-hi:#f3b06c;--e0-lo:#7f3f10;--e1:#2aa6a6;--e1-hi:#7fdcd6;--e1-lo:#0f5555;--e2:#c9403a;--e2-hi:#f08a7e;--e2-lo:#6f1712;--e3:#8b5dc4;--e3-hi:#bd98ea;--e3-lo:#47277c;--e4:#4a7fd1;--e4-hi:#86b0f2;--e4-lo:#244589}
+html{background:var(--n0);scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ivory);font-family:var(--serif);font-size:17px;line-height:1.4;background:radial-gradient(900px 480px at 50% -6%,#4a2a7a,transparent 70%),var(--n0);-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}button:disabled{cursor:not-allowed}
+:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px;border-radius:8px}
+.hidden{display:none!important}
+svg.ico{width:1em;height:1em;display:block;flex:none}
+.sprite{position:absolute;width:0;height:0;overflow:hidden}
+h1,h2,h3,h4{font-family:var(--disp);font-weight:400;margin:0}
+.panel{position:relative;background:linear-gradient(180deg,rgba(40,26,90,.94),rgba(18,12,48,.96));border:1px solid rgba(240,183,62,.34);border-radius:22px;box-shadow:0 18px 44px rgba(4,2,16,.55),inset 0 1px 0 rgba(255,236,176,.08)}
+.panel::before{content:"";position:absolute;inset:5px;border-radius:17px;border:1px solid rgba(240,183,62,.14);pointer-events:none}
+.panel>*{position:relative}
+.btn-gold{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px 22px;border:0;border-radius:14px;font-weight:800;font-size:19px;color:#2a1a04;background:linear-gradient(180deg,var(--gold-hi),var(--gold) 50%,#c1903a);box-shadow:0 -2px 0 rgba(120,76,10,.45) inset,0 10px 24px rgba(240,183,62,.2)}
+.btn-gold:disabled{opacity:.5}.btn-gold svg{width:22px;height:22px}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:12px;border:1px solid rgba(240,183,62,.34);background:rgba(240,183,62,.07);color:var(--gold-hi);font-weight:700;font-size:15px}
+.btn-ghost svg{width:18px;height:18px}
+.app{max-width:1320px;margin:0 auto;padding:14px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;margin-bottom:14px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.crest{width:48px;height:48px;flex:none;border-radius:50%;background:radial-gradient(circle,#3b2a86,#150e3a);border:1.5px solid var(--gold);display:grid;place-items:center}
+.crest svg{width:30px;height:30px;color:var(--gold-hi)}
+.brand h1{font-size:clamp(20px,3.4vw,30px);line-height:1.05;color:var(--gold-hi)}
+.brand p{margin:2px 0 0;font-style:italic;color:var(--mist);font-size:15px}
+@media(max-width:640px){.brand p{display:none}}
+.layout{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}.layout>*{min-width:0}
+@media(min-width:1024px){.layout{grid-template-columns:minmax(0,1fr) 360px;align-items:start}}
+.aside{display:flex;flex-direction:column;gap:14px}
+.bw{padding:10px}
+.bs{overflow-x:auto;border-radius:16px;scrollbar-width:thin}
+.board{position:relative;width:100%;aspect-ratio:1000/640;border-radius:16px;overflow:hidden;background:#0a0820;box-shadow:inset 0 0 0 1px rgba(240,183,62,.4)}
+@media(max-width:720px){.board{min-width:640px}}
+.board svg.scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+.tile text{font-family:var(--disp)}
+.pawns{position:absolute;inset:0;pointer-events:none}
+.pawn{position:absolute;width:5%;aspect-ratio:40/52;transform:translate(-50%,-100%);transition:left .26s ease,top .26s ease;filter:drop-shadow(0 4px 4px rgba(0,0,0,.6));z-index:5}
+.pawn.active{z-index:9}.pawn.active svg{animation:fl 1.2s ease-in-out infinite alternate}
+.pawn svg{width:100%;height:100%;display:block;overflow:visible}
+@keyframes fl{to{transform:translateY(-6px)}}
+.legend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;padding:12px 4px 2px;font-size:14px;color:var(--mist)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff4d0;background:linear-gradient(160deg,var(--vc-hi),var(--vc) 55%,var(--vc-lo));box-shadow:0 0 0 2px rgba(240,183,62,.6)}
+.legend i svg{width:14px;height:14px}
+.v0{--vc:var(--e0);--vc-hi:var(--e0-hi);--vc-lo:var(--e0-lo)}.v1{--vc:var(--e1);--vc-hi:var(--e1-hi);--vc-lo:var(--e1-lo)}.v2{--vc:var(--e2);--vc-hi:var(--e2-hi);--vc-lo:var(--e2-lo)}.v3{--vc:var(--e3);--vc-hi:var(--e3-hi);--vc-lo:var(--e3-lo)}.v4{--vc:var(--e4);--vc-hi:var(--e4-hi);--vc-lo:var(--e4-lo)}
+.turn{padding:18px 18px 18px;text-align:center}
+.turn small{display:block;color:var(--mist2);font-style:italic}
+.who{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:4px}.who h2{font-size:23px}
+.coin{--pc:#f0b73e;width:46px;height:46px;flex:none;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.35),transparent 55%),var(--pc);box-shadow:0 0 0 2px var(--gold),0 0 0 5px rgba(240,183,62,.18),0 6px 14px rgba(0,0,0,.45)}
+.coin svg{width:100%;height:100%;display:block}
+.coin.sm{width:38px;height:38px;box-shadow:0 0 0 2px var(--gold),0 4px 10px rgba(0,0,0,.4)}
+.coin.lg{width:60px;height:60px}
+.stage{perspective:700px;height:112px;display:grid;place-items:center;margin:6px 0 8px}
+.dbtn{background:none;border:0;padding:0}
+.dice{width:70px;height:70px;position:relative;transform-style:preserve-3d;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.face{position:absolute;inset:0;border-radius:15px;padding:9px;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);background:linear-gradient(145deg,#fffaf0,#d9d1b9);border:2px solid rgba(240,183,62,.9);box-shadow:inset 0 0 14px rgba(120,90,30,.28)}
+.pip{width:13px;height:13px;border-radius:50%;justify-self:center;align-self:center;background:radial-gradient(circle at 35% 30%,#c9403a,#4a0d0a 75%);box-shadow:0 1px 0 rgba(255,255,255,.7)}
+.f1{transform:translateZ(35px)}.f6{transform:rotateY(180deg) translateZ(35px)}.f2{transform:rotateY(-90deg) translateZ(35px)}.f5{transform:rotateY(90deg) translateZ(35px)}.f3{transform:rotateX(90deg) translateZ(35px)}.f4{transform:rotateX(-90deg) translateZ(35px)}
+.roster{padding:16px 14px 14px}.roster h3{font-size:19px;color:var(--gold-hi);margin:0 4px 10px}
+.pl{display:flex;flex-direction:column;gap:8px}
+.pc{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:9px 11px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(195,182,224,.16)}
+.pc.on{background:rgba(240,183,62,.11);border-color:rgba(240,183,62,.7)}
+.pc .nm{font-weight:700;font-size:17px;line-height:1.1}.pc .at{font-size:13px;color:var(--mist)}
+.pc .pt{font-family:var(--disp);font-size:22px;color:var(--gold-hi);text-align:right;line-height:1}.pc .pt small{display:block;font-family:var(--serif);font-size:12px;color:var(--mist2)}
+.trk{grid-column:1/-1;height:6px;border-radius:6px;background:rgba(195,182,224,.18);overflow:hidden}.trk b{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--gold-lo),var(--gold-hi));transition:width .3s}
+.log{padding:14px 14px 10px}.log h4{font-size:18px;color:var(--gold-hi);margin-bottom:6px}
+.lb{max-height:170px;overflow-y:auto;font-size:15px;color:#e0d8f5}.lb p{margin:0;padding:5px 3px;border-bottom:1px solid rgba(195,182,224,.12)}.lb strong{color:var(--gold-hi)}
+.overlay{position:fixed;inset:0;z-index:50;display:flex;overflow-y:auto;padding:calc(14px + env(safe-area-inset-top,0px)) 14px calc(14px + env(safe-area-inset-bottom,0px));background:rgba(6,3,20,.84);backdrop-filter:blur(8px)}
+.overlay>.panel{margin:auto;width:100%}
+.setup{max-width:620px;padding:0 0 22px;overflow:hidden}
+.hero{position:relative;height:210px;display:flex;justify-content:center;align-items:flex-end;overflow:hidden}
+.hero svg{height:210px;width:auto}
+.titles{text-align:center;padding:0 20px 4px}.titles h2{font-size:clamp(26px,6vw,36px);color:var(--gold-hi);line-height:1.05}.titles p{margin:6px 0 0;font-style:italic;color:var(--mist);font-size:17px}
+.form{padding:10px 20px 0;display:flex;flex-direction:column;gap:14px}
+.lab{display:block;font-weight:700;font-size:17px}.hint{color:var(--mist2);font-size:15px;font-style:italic;margin:0 0 6px}
+.teams{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.team{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:14px;text-align:left;background:rgba(255,255,255,.04);border:1px solid rgba(195,182,224,.24)}
+.team b{display:block;font-size:16px;line-height:1.1}.team small{font-size:13px;color:var(--mist2);line-height:1.1;display:block}
+.team.on{background:linear-gradient(180deg,rgba(240,183,62,.36),rgba(240,183,62,.14));border-color:var(--gold)}
+@media(max-width:420px){.teams{grid-template-columns:1fr}}
+.qm{max-width:720px;padding:0 0 20px;overflow:hidden}
+.qband{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 20px;background:linear-gradient(90deg,var(--vc-lo),var(--vc));border-bottom:1px solid rgba(255,236,176,.35)}
+.qband .vn{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-size:20px;color:#fff7dc}.qband .vn svg{width:28px;height:28px}
+.qband .rl{font-size:15px;color:#fff1c2}.qband .rl b{font-family:var(--disp);font-size:22px}
+.qb{padding:20px 22px 0}
+.qwho{display:flex;align-items:center;gap:10px;color:var(--gold);font-style:italic;font-size:16px;margin-bottom:10px}
+.qq{margin:0 0 18px;padding:14px 16px 14px 18px;border-left:3px solid var(--gold);border-radius:4px 14px 14px 4px;background:linear-gradient(90deg,rgba(240,183,62,.14),rgba(240,183,62,.02));font-size:clamp(20px,4vw,25px);line-height:1.25;color:var(--gold-hi)}
+.opts{display:grid;gap:9px;margin-bottom:16px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 13px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(195,182,224,.28);font-size:18px;line-height:1.25}
+.opt .l{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-family:var(--disp);font-size:16px;color:var(--gold-hi);border:1.5px solid rgba(240,183,62,.6)}
+.opt.right{background:rgba(95,211,160,.15);border-color:var(--ok)}.opt.right .l{background:var(--ok);color:#06241a;border-color:var(--ok)}
+.opt.wrong{background:rgba(255,138,122,.14);border-color:var(--bad)}.opt.wrong .l{background:var(--bad);color:#3a0c05;border-color:var(--bad)}
+.ex{display:flex;gap:12px;padding:13px 15px;border-radius:14px;margin-bottom:14px;border:1px solid}
+.ex svg{width:26px;height:26px;flex:none}.ex h5{margin:0 0 2px;font-family:var(--disp);font-weight:400;font-size:19px}.ex p{margin:0;color:#e0d8f5}
+.ex.ok{background:rgba(95,211,160,.1);border-color:rgba(95,211,160,.5)}.ex.ok svg{color:var(--ok)}.ex.no{background:rgba(255,138,122,.09);border-color:rgba(255,138,122,.5)}.ex.no svg{color:var(--bad)}
+.qa{display:flex;justify-content:flex-end}.qa .btn-gold{width:auto;padding:12px 28px;font-size:18px}
+.sm2{max-width:440px;padding:26px 22px 20px;text-align:center}.sm2 h3{font-size:25px;color:var(--gold-hi);margin-bottom:8px}.sm2 p{color:var(--mist);margin:0 0 18px}
+.row2{display:flex;gap:10px}.row2>*{flex:1}.row2 .btn-gold{width:auto;font-size:17px;padding:12px}.row2 .btn-ghost{justify-content:center;padding:12px;font-size:17px}
+.win{max-width:480px;padding:0 0 24px;text-align:center;overflow:hidden}.win h2{font-size:32px;color:var(--gold-hi);margin:6px 14px}
+.win .wh{display:flex;align-items:center;justify-content:center;gap:12px;font-size:21px;font-weight:700;margin:0 14px 8px}.win p{color:var(--mist);margin:0 24px 20px}.win .btn-gold{width:calc(100% - 48px);margin:0 auto}
+.tb{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:640px){.bl{display:none}.tb .btn-ghost{padding:10px}}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.seg button{display:flex;align-items:center;justify-content:center;padding:11px;border-radius:12px;font-weight:700;font-size:17px;background:rgba(255,255,255,.04);border:1px solid rgba(195,182,224,.25);color:var(--mist)}
+.seg button.on{background:linear-gradient(180deg,rgba(240,183,62,.42),rgba(240,183,62,.2));border-color:var(--gold);color:var(--gold-hi)}
+footer{text-align:center;color:var(--mist2);font-size:14px;font-style:italic;padding:16px 8px 2px}
+@media(prefers-reduced-motion:reduce){.dice,.pawn{transition-duration:.01s}.pawn.active svg{animation:none}}
+</style></head><body>
+<svg class="sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs id="defs">
+<radialGradient id="gHalo"><stop offset="0" stop-color="#ffd9a0" stop-opacity=".9"/><stop offset=".5" stop-color="#ff9d6e" stop-opacity=".3"/><stop offset="1" stop-color="#ff9d6e" stop-opacity="0"/></radialGradient>
+<linearGradient id="gVol" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b5aa6"/><stop offset="1" stop-color="#1f1a4d"/></linearGradient>
+<linearGradient id="gRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0b8"/><stop offset=".5" stop-color="#f0b73e"/><stop offset="1" stop-color="#8d611a"/></linearGradient>
+<clipPath id="pinClip"><circle cx="20" cy="19" r="14"/></clipPath>
+<symbol id="i-wagon" viewBox="0 0 48 48"><path d="M8 22Q24 6 40 22z" fill="currentColor"/><rect x="7" y="25" width="34" height="6" rx="2" fill="currentColor"/><g fill="none" stroke="currentColor" stroke-width="3"><circle cx="15" cy="37" r="6.5"/><circle cx="33" cy="37" r="6.5"/></g><path d="M15 31v12M9 37h12M33 31v12M27 37h12" stroke="var(--ico-accent,#ffe08a)" stroke-width="1.6"/></symbol>
+<symbol id="i-book" viewBox="0 0 48 48"><g fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"><path d="M24 17c-4-3-10-4-16-3v26c6-1 12 0 16 3 4-3 10-4 16-3V14c-6-1-12 0-16 3z"/><path d="M24 17v26"/></g><path d="M24 3l1.6 3.8L29.5 8l-3.9 1.4L24 13l-1.6-3.6L18.5 8l3.9-1.2z" fill="var(--ico-accent,#ffe08a)"/></symbol>
+<symbol id="i-sombrero" viewBox="0 0 48 48"><ellipse cx="24" cy="33" rx="21" ry="6" fill="currentColor"/><path d="M13 32c0-15 22-15 22 0z" fill="currentColor"/><rect x="13" y="26" width="22" height="3.4" fill="var(--ico-accent,#ffe08a)"/></symbol>
+<symbol id="i-scale" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M7 20h10M5 7h14"/><path d="M5 7l-3 7a3.5 3.5 0 0 0 6 0zM19 7l-3 7a3.5 3.5 0 0 0 6 0z"/></g></symbol>
+<symbol id="i-temple" viewBox="0 0 48 48"><g fill="currentColor" fill-rule="evenodd"><path d="M24 2l3.4 14H20.6z"/><path d="M20 16h8v16h-8z"/><path d="M12 14l3.4 11H8.6zM36 14l3.4 11h-6.8z"/><path d="M9 25h6v9H9zM33 25h6v9h-6z"/><path d="M5 32h38v11H5zM20.5 43v-6.5a3.5 3.5 0 0 1 7 0V43z"/></g></symbol>
+<symbol id="i-flag" viewBox="0 0 48 48"><path d="M13 6v38" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/><path d="M15 8c7-3 12 3 19 0v17c-7 3-12-3-19 0z" fill="var(--ico-accent,#ffe08a)"/></symbol>
+<symbol id="i-vol" viewBox="0 0 48 48"><path d="M3 44L18 14h12l15 30z" fill="currentColor"/><path d="M16 21Q24 10 32 21l-4 3-4-3-4 3z" fill="var(--ico-accent,#fff)"/></symbol>
+<symbol id="u-die" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><g fill="currentColor"><circle cx="8.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="8.5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="8.5" cy="15.5" r="1.5"/><circle cx="15.5" cy="15.5" r="1.5"/></g></symbol>
+<symbol id="u-restart" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.4-5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3.5 4v4.8H8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="u-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 12.5l3.5 3.5L17 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="u-cross" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.5 8.5l7 7M15.5 8.5l-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+<symbol id="scene-vol" viewBox="0 0 260 220"><circle cx="130" cy="40" r="60" fill="url(#gHalo)"/><path d="M0 220L38 150L68 166L98 128L128 152V220z" fill="#2a2060"/><path d="M18 220L108 72Q130 32 152 72L246 220z" fill="url(#gVol)"/><path d="M152 72L246 220H170z" fill="#0c0a2c" opacity=".3"/><path d="M106 78Q130 28 154 78L142 90L132 78L124 94L114 80L108 90z" fill="#f4f7ff"/><ellipse cx="130" cy="50" rx="9" ry="3.5" fill="#ff8a3d"/><g fill="#c9c3e6" opacity=".55"><circle cx="130" cy="36" r="9"/><circle cx="122" cy="22" r="11"/><circle cx="138" cy="9" r="12"/></g><g id="mari"></g></symbol>
+<symbol id="u-sound" viewBox="0 0 24 24"><path d="M3 9.5v5h4l5 4v-13l-5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="u-mute" viewBox="0 0 24 24"><path d="M3 9.5v5h4l5 4v-13l-5 4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+<symbol id="u-music" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.5" fill="currentColor"/><circle cx="16.5" cy="16" r="2.5" fill="currentColor"/></symbol>
+<symbol id="u-music-off" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12" fill="none" stroke="currentColor" stroke-width="1.8" opacity=".55"/><circle cx="6.5" cy="18" r="2.5" fill="currentColor" opacity=".55"/><circle cx="16.5" cy="16" r="2.5" fill="currentColor" opacity=".55"/><path d="M3 3l18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+</defs></svg>
+<div class="app">
+<header class="panel top"><div class="brand"><div class="crest"><svg class="ico"><use href="#i-vol"/></svg></div><div><h1>Odisea de la Iglesia en México</h1><p>Del carromato pionero a la cumbre del Popocatépetl</p></div></div>
+<div class="tb"><button type="button" class="btn-ghost" onclick="toggleSound()" aria-label="Activar o apagar efectos de sonido"><svg class="ico" id="sndI"><use href="#u-sound"/></svg><span class="bl" id="sndT">Sonido</span></button><button type="button" class="btn-ghost" onclick="toggleMusic()" aria-label="Activar o silenciar el himno"><svg class="ico" id="musI"><use href="#u-music"/></svg><span class="bl" id="musT">Himno</span></button><button type="button" class="btn-ghost" onclick="$('restartModal').classList.remove('hidden')" aria-label="Reiniciar"><svg class="ico"><use href="#u-restart"/></svg><span class="bl">Reiniciar</span></button></div></header>
+<main class="layout">
+<section><div class="panel bw"><div class="bs" id="bs"><div class="board" id="board"><svg class="scene" id="scene" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Tablero: camino dorado hasta el volcán Popocatépetl"></svg><div class="pawns" id="pawns"></div></div></div><div class="legend" id="legend"></div></div></section>
+<aside class="aside">
+<div class="panel turn"><small>Turno de</small><div class="who"><span class="coin" id="aCoin"></span><h2 id="aName"></h2></div>
+<div class="stage"><button type="button" class="dbtn" onclick="rollDice()" aria-label="Tirar el dado"><div class="dice" id="dice"></div></button></div>
+<button type="button" id="rollBtn" class="btn-gold" onclick="rollDice()"><svg class="ico"><use href="#u-die"/></svg>Tirar el dado</button></div>
+<div class="panel roster"><h3>Jugadores y avance</h3><div class="pl" id="pl"></div></div>
+<div class="panel log"><h4>Bitácora del viaje</h4><div class="lb" id="log"></div></div>
+</aside></main>
+<footer>Trivia de historia de la Iglesia en México · responde bien para avanzar<br>Himno de fondo: «Placentero nos es trabajar» (#88), letra de Andrés C. González, música de Joseph P. Webster</footer></div>
+<div id="setup" class="overlay"><div class="panel setup"><div class="hero"><svg viewBox="0 0 260 220"><use href="#scene-vol"/></svg></div>
+<div class="titles"><h2>Odisea de la Iglesia en México</h2><p>Del carromato pionero a la cumbre del Popocatépetl</p></div>
+<div class="form"><div><span class="lab">Modo de juego</span><div class="seg" id="modeSeg"><button type="button" data-m="I" class="on" onclick="setMode('I')">Individual</button><button type="button" data-m="E" onclick="setMode('E')">Por equipos</button></div></div><div><span class="lab" id="selLab"></span><p class="hint" id="selHint"></p><div class="teams" id="teams"></div></div>
+<button type="button" id="go" class="btn-gold" onclick="start()" disabled><svg class="ico"><use href="#i-wagon"/></svg>Comenzar la odisea</button></div></div></div>
+<div id="qModal" class="overlay hidden"><div class="panel qm" id="qp"><div class="qband"><div class="vn"><svg class="ico" id="qi"></svg><span id="qe"></span></div><div class="rl">Dado: <b id="qr"></b> casillas</div></div>
+<div class="qb"><div class="qwho"><span class="coin sm" id="qc"></span><span id="qn"></span></div><blockquote class="qq" id="qt"></blockquote><div class="opts" id="opts"></div>
+<div id="ex" class="ex hidden"><svg class="ico" id="exi"></svg><div><h5 id="ext"></h5><p id="exb"></p></div></div>
+<div class="qa"><button type="button" id="cont" class="btn-gold hidden" onclick="afterQ()">Continuar</button></div></div></div></div>
+<div id="restartModal" class="overlay hidden"><div class="panel sm2"><h3>¿Reiniciar el juego?</h3><p>Volverás a elegir equipos y todos regresan a la salida.</p><div class="row2"><button type="button" class="btn-ghost" onclick="$('restartModal').classList.add('hidden')">Cancelar</button><button type="button" class="btn-gold" onclick="restart()">Sí, reiniciar</button></div></div></div>
+<div id="winModal" class="overlay hidden"><div class="panel win"><div class="hero"><svg viewBox="0 0 260 220"><use href="#scene-vol"/></svg></div><h2>¡Llegaste a la cumbre!</h2><div class="wh"><span class="coin sm" id="wc"></span><span id="wt"></span></div><p>Subiste hasta el Popocatépetl, donde en 1881 se dedicó México para la predicación del Evangelio.</p><button type="button" class="btn-gold" onclick="restart()"><svg class="ico"><use href="#u-restart"/></svg>Jugar de nuevo</button></div></div>
+<script>
+const C=`¿En qué año Brigham Young comenzó a guiar a los santos hacia el oeste?|1846|1844|1852
+¿Qué tratado entregó a EE.UU. la región del valle de Lago Salado?|Guadalupe Hidalgo|Versalles|Tordesillas
+¿A qué país viajó Parley P. Pratt antes de organizar clases de español?|Chile|Perú|Argentina
+¿Dónde, además de Salt Lake City, organizó Pratt clases de español?|San Bernardino, California|Nauvoo|Independence
+¿Qué presidente mexicano estableció la libertad religiosa?|Benito Juárez|Porfirio Díaz|Venustiano Carranza
+¿Quiénes tradujeron partes del Libro de Mormón al español en 1874?|Daniel W. Jones y Henry Brizzee|Orson y Parley Pratt|Moses Thatcher y John Taylor
+¿Cómo se llamó la traducción parcial de 1875?|Trozos Selectos del Libro de Mormón|Libro de Mosíah|La voz del desierto
+¿Cuántos ejemplares llevaron los misioneros a México en 1875?|1500|500|3000
+¿Quién fue el primer converso en México?|José Epifanio Jesús|Plotino Rhodakanaty|Silviano Arteaga
+¿En qué ciudad fue bautizado el primer converso mexicano?|Hermosillo|Ciudad de México|Chihuahua
+¿En qué año fue ese primer bautismo?|1877|1879|1881
+¿Quiénes bautizaron a José Epifanio Jesús?|Melitón Trejo y Louis Garff|Daniel Jones y Henry Brizzee|Moses Thatcher y Rey Pratt
+¿Quién recibió Trozos Selectos y compartió el Evangelio con sus amigos en 1878?|Plotino Rhodakanaty|Agricol Lozano|Abel Páez
+¿A qué presidente de la Iglesia escribió Rhodakanaty pidiendo que la Iglesia se estableciera en México?|John Taylor|Brigham Young|Wilford Woodruff
+¿Quiénes se bautizaron el 15 de noviembre de 1879?|Plotino Rhodakanaty y Silviano Arteaga|Rafael Monroy y Vicente Morales|Abel Páez e Isaías Juárez
+¿Qué apóstol dedicó México en 1880?|Moses Thatcher|Rey L. Pratt|Gordon B. Hinckley
+¿En qué hotel de la Ciudad de México dedicó Thatcher el territorio?|Hotel Iturbide|Gran Hotel|Hotel Reforma
+¿En qué volcán se dedicó México para la obra misional en 1881?|Popocatépetl|Iztaccíhuatl|Pico de Orizaba
+¿Quién ofreció una oración que impresionó profundamente a Thatcher en el Popocatépetl?|Silviano Arteaga|Fernando A. Lara|Lino Zárate
+¿Cuántos colonizadores llegaron al norte de México en 1885?|Unos 400|Unos 40|Unos 4000
+¿Qué se publicó en 1886?|La primera traducción completa del Libro de Mormón al español|El primer himnario en español|La Perla de Gran Precio en náhuatl
+¿Cómo se llamó la publicación de los creyentes de la Ciudad de México?|La voz del desierto|El Mensajero|La Estrella
+¿Quiénes fueron los misioneros que enfermaron y fallecieron en 1889?|Sylvester D. Collett y David J. Rogers|Rey Pratt y Harold Pratt|Moses Thatcher y Melitón Trejo
+¿Dónde se organizó una estaca en las colonias en 1895?|Colonia Juárez|Colonia Dublán|Ciudad Juárez
+¿Cuántos años estuvo cerrada la misión del centro de México antes de 1901?|12|5|20
+¿Quién fue el primer mexicano Santo de los Últimos Días misionero de tiempo completo?|Andrés Carlos González|Toribio Ontiveros|Rafael Monroy
+¿Por qué los colonos abandonaron el norte de México en 1912?|Por la presión de la revolución|Por una sequía|Por una epidemia
+¿Quién presidió la primera rama de habla hispana en el norte de México en 1916?|Toribio Ontiveros|Abel Páez|Julio García
+¿Qué presidente de misión escribía a los miembros de México durante la revolución?|Rey L. Pratt|Harold Pratt|Arwell L. Pierce
+¿En qué año fue ejecutado Rafael Monroy?|1915|1926|1912
+¿En qué poblado ocurrió el martirio de Rafael Monroy?|San Marcos|Hermosillo|Colonia Dublán
+¿Quién fue ejecutado junto con Rafael Monroy?|Vicente Morales|Abel Páez|Silviano Arteaga
+¿Cómo se llamaba la madre de Rafael Monroy?|Jesucita|Petra|Natalia
+¿Cuáles dijo ella que eran sus únicas armas?|La Biblia y el Libro de Mormón|Machetes y rifles|Ninguna, solo su fe
+¿Qué ejército tomó San Marcos en 1915?|El zapatista|El federal|El cristero
+¿Cómo se llamaban las hermanas Monroy arrestadas?|Guadalupe, Natalia y Jovita|María, Rosa y Elena|Petra, Sara y Lucía
+¿Qué presidenta de la Sociedad de Socorro murió de tifus atendiendo enfermos?|Petra López|Jesucita Monroy|Natalia Monroy
+¿Qué conflicto expulsó a los misioneros extranjeros en 1926?|La Guerra Cristera|La Guerra de Reforma|La Guerra de los Pasteles
+¿Quiénes fueron autorizados para dirigir la Iglesia en 1926?|Isaías Juárez, Abel Páez y Bernabé Parra|Pierce, Pratt e Ivins|Zárraga, Azarte y García
+¿Cuántos años fue Rey L. Pratt presidente de la Misión Mexicana?|23|10|40
+¿Qué pidieron la Primera y Segunda Convención a la Primera Presidencia?|Un presidente de misión mexicano|Un templo en México|Más misioneros
+¿Quién fue Harold Pratt?|Un ciudadano mexicano no de origen mexicano|Un misionero estadounidense|Un líder de la Tercera Convención
+¿Quién fue nombrado líder de la Tercera Convención en 1936?|Abel Páez|Agricol Lozano|Isaías Juárez
+¿Quién se acercó a Agricol Lozano para promover la Tercera Convención?|Margarito Bautista|Abel Páez|Julio García
+¿Con qué comparó Lozano nombrar un líder fuera de la estructura de la Iglesia?|Con construir un edificio sin fundaciones|Con navegar sin timón|Con sembrar sin agua
+¿En qué trabajaba Agricol Lozano Bravo?|Construcción y reparación de centros de reuniones|Minería|Comercio
+¿En qué estado escoltaba Lozano a los misioneros en 1923?|Hidalgo|Oaxaca|Sonora
+¿Qué fracción de los miembros mexicanos se unió a la Tercera Convención?|Aproximadamente una tercera parte|La mitad|Una décima parte
+¿Quién fue llamado presidente de misión en 1942 para sanar el cisma?|Arwell L. Pierce|Harold Pratt|Rey L. Pratt
+¿Con quién dijo Pierce que había conversado toda la noche sobre reunir a la familia?|Con Abel|Con Margarito|Con Agricol
+¿Qué presidente de la Iglesia viajó a México en 1946 para la reunificación?|George Albert Smith|Heber J. Grant|David O. McKay
+¿Qué sugirió Pierce que los miembros mexicanos necesitaban primero?|Su propia estaca|Un templo|Una escuela
+¿En qué año se organizó la primera estaca de México?|1961|1946|1975
+¿Dónde se estableció la primera estaca de habla hispana?|Ciudad de México|Monterrey|Guadalajara
+¿Quién, exmiembro de la Tercera Convención, fue primer consejero de la primera estaca?|Julio García|Abel Páez|Bernabé Parra
+¿Quién fue el primer presidente de estaca étnicamente mexicano?|Agricol Lozano Herrera|Julio García|Isaías Juárez
+¿Quién dirigió en 1944 la traducción de la investidura al español junto con Eduardo Balderas?|Antoine R. Ivins|Moses Thatcher|Rey L. Pratt
+¿Dónde fueron las primeras sesiones del templo en un idioma distinto al inglés?|Templo de Mesa, Arizona|Templo de Salt Lake|Templo de Los Ángeles
+¿En qué fecha fue la primera sesión de investidura en español?|6 de noviembre de 1945|20 de mayo de 1877|9 de diciembre de 1895
+¿Cuántos miembros asistieron a esa primera sesión?|Más de doscientos|Unos cincuenta|Más de mil
+¿De qué rama era presidente José Gracia?|Monterrey|Ermita|Tenayo
+¿Qué dijo Saturnino Aguilar que se consideraba antes del templo?|Huérfano|Extranjero|Pionero
+¿Con qué fiesta mexicana coincidían los viajes al templo en noviembre?|Día de los Muertos|Navidad|Semana Santa
+¿Qué permitió el arzobispo Luis María Martínez en 1953?|Microfilmar los registros genealógicos católicos|Construir una capilla|Traducir la Biblia
+¿Qué escuela emblemática comenzó en 1963?|Benemérito de las Américas|BYU–Hawái|Escuela Normal
+¿Dónde fue la primera conferencia general de Área en 1972?|Auditorio Nacional|Estadio Azteca|Bellas Artes
+¿Cuántas estacas se crearon en la Ciudad de México en un fin de semana en 1975?|Quince|Cinco|Treinta
+¿Qué destacó Victor L. Brown de la Misión México Torreón en 1978?|Descenso de la mortalidad infantil|Más bautismos|Nuevas capillas
+¿Quién dedicó el Templo de la Ciudad de México en 1983?|Gordon B. Hinckley|Spencer W. Kimball|Thomas S. Monson
+¿Qué logró la Iglesia en México en 1993?|Registro formal para tener propiedades|Un templo|Su primera estaca
+¿Tras visitar qué lugar decidió Hinckley construir templos más pequeños?|Colonia Juárez|Hermosillo|Oaxaca
+¿Cuántos templos se dedicaron en México en el año 2000?|Ocho|Tres|Doce
+¿Cuál de estos templos se dedicó en el 2000?|Oaxaca|Guadalajara|Monterrey
+¿En qué iniciativa fueron pioneros los santos mexicanos en 2001?|Fondo Perpetuo para la Educación|Fondo de ayuno|Bienestar
+¿Qué ocurrió con los miembros de México en 2004?|Superaron el millón|Llegaron a 100 mil|Llegaron a 5 millones
+¿Quién dedicó en 2014 el Centro de Capacitación Misional de la Ciudad de México?|Dallin H. Oaks|Russell M. Nelson|Henry B. Eyring
+¿Qué templo anunció Russell M. Nelson en 2018?|Puebla|Querétaro|Cancún
+¿Cuántos templos tiene México entre operando, en construcción y planificados?|27|13|50
+¿Cuántos templos operan hoy en México?|14|8|20
+¿Quién era Ignacio Manuel Altamirano?|Escritor y político de origen náhuatl|Un misionero de Utah|Un presidente de rama
+¿Qué le impresionó a Altamirano del Libro de Mormón?|Las profecías sobre los lamanitas|Su tamaño|Su traducción
+¿Por qué se apartó Rhodakanaty de la Iglesia?|No se inició una comunidad de la Orden Unida|Por la Guerra Cristera|Se mudó a Chile
+¿Qué dijo Brigham Young en 1874 sobre llevar el Evangelio a México?|Que había llegado el momento|Que aún era muy pronto|Que debían esperar la paz
+¿Qué escritura menciona la obra entre el pueblo disperso del Señor?|3 Nefi 21:26–27|1 Nefi 3:7|Alma 53
+¿De qué cuórum era Moses Thatcher?|Cuórum de los Doce Apóstoles|Los Setenta|Obispado Presidente
+¿Quién era presidente de la rama de la Ciudad de México en 1881?|Silviano Arteaga|Fernando A. Lara|Lino Zárate
+¿Quién fue un misionero local que subió al Popocatépetl con Thatcher?|Fernando A. Lara|Rey Pratt|Toribio Ontiveros
+¿Qué dijo Rey Pratt al volver de México durante la revolución?|Estoy listo para regresar|No volveré|Todo está perdido
+¿Cómo describió Pratt a las hermanas de la Sociedad de Socorro?|Ángeles ministrantes|Valientes soldados|Fieles maestras
+¿Qué presidente encabezó a los constitucionalistas?|Venustiano Carranza|Benito Juárez|Emiliano Zapata
+¿Cuántos años después se rededicó el Templo de la Ciudad de México (2008)?|25|10|50
+¿Cuántos templos cerca de la Ciudad de México anunció Nelson en octubre de 2022?|Cuatro|Dos|Siete
+¿Cuántos Santos de los Últimos Días viven en México?|Más de 1,530,000|Unos 500,000|Más de 3 millones
+¿En cuántas congregaciones se reúnen los santos en México?|Casi 1,900|Unas 300|Más de 10,000
+¿Con quién mantenía correspondencia Rhodakanaty en Utah?|Melitón Trejo|Rey Pratt|Harold Pratt
+¿Qué victorias permitieron la libertad religiosa en México (1858–1872)?|Guerra de Reforma y contra la intervención francesa|Independencia y Revolución|Guerra Cristera
+¿A quiénes enseñó Rey L. Pratt en EE.UU. entre 1912 y 1917?|A hispanohablantes|A mormones nuevos|A lamanitas
+¿Cómo llamó Abel Páez al nuevo grupo, según el texto de la división?|Tercera Convención|Misión Libre|Rama Nacional
+¿Qué frase usaron para describir a Abel Páez en 1936?|Mexicano por raza y sangre|Misionero por vocación|Pionero del norte
+¿Cuándo fueron llamados Juárez, Parra y Páez como líderes locales?|1924|1861|1946
+¿Qué hicieron los misioneros de 1879 al llegar a la Ciudad de México?|Bautizaron, ordenaron élderes y organizaron una rama|Construyeron un templo|Abrieron una escuela
+¿En qué estados se organizó la estaca de las colonias en 1895?|Chihuahua y Sonora|Oaxaca y Puebla|Jalisco y Nayarit
+¿Qué hizo Pierce en las reuniones con la Tercera Convención?|Los escuchó, les expresó amor y les dio tiempo|Los excomulgó|Los ignoró
+¿Qué familia dio refugio a santos desplazados por el combate en San Marcos?|La familia Monroy|La familia Páez|La familia Pratt
+¿Quién escribió que las únicas armas de su familia eran sus Escrituras?|Jesucita Monroy|Petra López|Natalia Monroy
+¿Qué pidió Rhodakanaty a Taylor para comenzar a predicar?|El Sacerdocio Aarónico|Un templo|Dinero
+¿Cuánto duró el cisma en la Iglesia en México?|De 1936 a 1946|De 1912 a 1917|De 1961 a 1975`.trim().split("\n").map(l=>l.split("|"));
+const $=id=>document.getElementById(id);
+const SK={lam:"#a2663a",nef:"#c68a56",jar:"#dba26c",ter:"#b27a48",jas:"#e2ae86",pio:"#ecc7a2",mis:"#e6b88e",rev:"#9c6438"};
+const bd=c=>`<path d="M4 48C4 36 13 31 24 31s20 5 20 17z" fill="${c}"/>`;
+const hd=s=>`<rect x="20" y="26" width="8" height="9" fill="${s}"/><ellipse cx="24" cy="20" rx="9" ry="10.5" fill="${s}"/>`;
+const fc=`<circle cx="20.3" cy="20.5" r="1.2" fill="#24140c"/><circle cx="27.7" cy="20.5" r="1.2" fill="#24140c"/><path d="M20.5 25.5q3.5 2.6 7 0" stroke="#5a2418" stroke-width="1.3" fill="none" stroke-linecap="round"/>`;
+const mus=c=>`<path d="M18.5 23.6q5.5-3.4 11 0q-5.5 1.8-11 0z" fill="${c}"/>`;
+const FIG={
+lam:`<path d="M13 20c-1 10 0 21 4 25h14c4-4 5-15 4-25z" fill="#140a07"/>`+bd("#d98c2b")+`<path d="M13 37l11 9 11-9" fill="none" stroke="#2aa6a6" stroke-width="3" stroke-dasharray="2 2.4"/><path d="M10 48l14-8 14 8" fill="none" stroke="#8c2f1f" stroke-width="2.4"/>`+hd(SK.lam)+`<path d="M14.5 17c1-9 18-9 19 0-5-2.6-14-2.6-19 0z" fill="#140a07"/>`+fc+`<rect x="14" y="11.5" width="20" height="4" rx="2" fill="#c9403a"/><path d="M16 12L10 3l8 4zM24 11V0l4 9zM32 12l6-9-8 4z" fill="#2aa6a6"/><path d="M20 11.5L18 2l5 7zM28 11.5l3-8-6 6z" fill="#f2c14e"/>`,
+nef:bd("#f1e8d2")+`<path d="M8 48l16-12 16 12" fill="none" stroke="#2f5fb0" stroke-width="5"/>`+hd(SK.nef)+`<path d="M14.5 19c-1-11 19-11 19 0-2-5-17-5-19 0z" fill="#20130b"/>`+fc+`<rect x="14.5" y="13" width="19" height="3" rx="1.5" fill="#f0b73e"/><path d="M38 30l-8 16" stroke="#cfd6e4" stroke-width="3" stroke-linecap="round"/><rect x="34" y="30" width="8" height="2.6" rx="1" fill="#f0b73e" transform="rotate(-10 38 31)"/>`,
+jar:`<path d="M13 20c-2 12 0 22 4 26h14c4-4 6-14 4-26z" fill="#b8b3c4"/>`+bd("#8a6a3a")+`<path d="M17 38l7 10 7-10" fill="none" stroke="#5a4020" stroke-width="2"/>`+hd(SK.jar)+`<path d="M14 18c0-11 20-11 20 0-5-4-15-4-20 0z" fill="#b8b3c4"/>`+fc+mus("#b8b3c4")+`<circle cx="24" cy="42" r="8" fill="#ffe58a" opacity=".35"/><circle cx="24" cy="42" r="3.6" fill="#fff6c8"/>`,
+ter:bd("#2b2b3a")+`<path d="M19 31l5 10 5-10z" fill="#f4f4f4"/><path d="M23 33h2l1 10-2 3-2-3z" fill="#c9403a"/>`+hd(SK.ter)+`<path d="M15.5 17c1-6 16-6 17 0-4-2-13-2-17 0z" fill="#150d08"/>`+fc+mus("#150d08")+`<ellipse cx="24" cy="12.5" rx="19" ry="4.2" fill="#e9d9a8"/><path d="M14.5 12.5c0-10 19-10 19 0z" fill="#f3e6bb"/><rect x="14.5" y="9.5" width="19" height="3" fill="#7a4a22"/><rect x="35" y="36" width="9" height="5" rx="2" fill="#fff" transform="rotate(-24 39 38)"/>`,
+jas:`<path d="M31 14q10 3 6 17-1-9-6-12z" fill="#5a3418"/>`+bd("#2a9d8f")+`<path d="M13 33q11 9 22 0" fill="none" stroke="#1d7c71" stroke-width="3"/>`+hd(SK.jas)+`<path d="M14.5 19c-1-11 19-11 19 0-5-3-14-3-19 0z" fill="#5a3418"/>`+fc+`<path d="M13.5 21a10.5 10.5 0 0 1 21 0" fill="none" stroke="#2b2b3a" stroke-width="2.2"/><rect x="11.5" y="19" width="4" height="7" rx="2" fill="#f0b73e"/><rect x="32.5" y="19" width="4" height="7" rx="2" fill="#f0b73e"/>`,
+pio:`<path d="M13 22c0 8 2 14 6 16h10c4-2 6-8 6-16z" fill="#6b4423"/>`+bd("#b5532a")+`<path d="M13 48l11-12 11 12z" fill="#f6efe0"/>`+hd(SK.pio)+fc+`<path d="M11 24C8 6 40 6 37 24c0 5-3 9-6 10V19c-5-3-9-3-14 0v15c-3-1-6-5-6-10z" fill="#f3e9d2"/><path d="M12 22c4-10 20-10 24 0" fill="none" stroke="#4a7fd1" stroke-width="2.6"/>`,
+mis:bd("#f6f6f6")+`<path d="M18 31l6 6 6-6" fill="none" stroke="#d0d0d0" stroke-width="1.5"/><path d="M23 35h2l1.2 11-2.2 2-2.2-2z" fill="#8c2f2f"/><rect x="31" y="38" width="8" height="4.6" rx="1" fill="#15151a"/>`+hd(SK.mis)+`<path d="M14.5 18c-1-11 19-11 19 0-4-3-15-3-19 0z" fill="#2a1a10"/>`+fc,
+rev:bd("#f2ead6")+`<path d="M6 46L40 33M42 46L8 33" stroke="#5a3b1e" stroke-width="3"/><path d="M17 31l7 7 7-7z" fill="#c9403a"/>`+hd(SK.rev)+fc+mus("#150d08")+`<ellipse cx="24" cy="13.5" rx="21" ry="5" fill="#d9b36a"/><path d="M13.5 13.5c0-13 21-13 21 0z" fill="#e8c57c"/><rect x="13.5" y="9.5" width="21" height="3.4" fill="#c9403a"/>`};
+const TEAMS=[["lam","Lamanitas","Guerreros con plumas","#d98c2b"],["nef","Nefitas","Pueblo de la espada","#3f6fc2"],["jar","Jareditas","La piedra luminosa","#6b4f8a"],["ter","Tercera Convención","Líderes de 1936","#8b5dc4"],["jas","JAS","Jóvenes Adultos Solteros","#2a9d8f"],["pio","Pioneros","Valientes de Utah","#b5532a"],["mis","Misioneros","Con placa negra","#3a6ea5"],["rev","Santos de la Revolución","Fieles de 1915","#c9403a"]];
+const beard=c=>`<path d="M14.8 22c.6 9 4.4 13.4 9.2 13.4s8.6-4.4 9.2-13.4c-2 4.4-4.4 6.4-9.2 6.4s-7.2-2-9.2-6.4z" fill="${c}"/>`;
+const PEOPLE=[["plo","Plotino Rhodakanaty","Escribió a Utah desde México (1878)","#7a4fa3"],["agr","Agricol Lozano","Fiel a la autoridad del sacerdocio","#b5532a"],["raf","Rafael Monroy","Mártir de San Marcos (1915)","#2f6f9f"],["vic","Vicente Morales","Mártir de San Marcos (1915)","#2a9d8f"],["mel","Melitón González Trejo","Traductor del Libro de Mormón","#8a2f3a"],["mos","Moses Thatcher","Apóstol que dedicó México (1881)","#3a4a7a"],["mar","Margarito Bautista","Impulsó la Tercera Convención","#c9403a"]];
+Object.assign(FIG,{
+plo:bd("#2b2733")+`<path d="M18 31l6 7 6-7z" fill="#f4f4f4"/><path d="M20.6 38.4l3.4-2 3.4 2-3.4 2z" fill="#a23a4a"/>`+hd("#efc9a4")+beard("#2a1a10")+fc+mus("#2a1a10")+`<path d="M13.6 19C11 6 37 6 34.4 19c-1-5-3-8-10.4-8s-9.4 3-10.4 8z" fill="#2a1a10"/><circle cx="14" cy="14" r="3.2" fill="#2a1a10"/><circle cx="34" cy="14" r="3.2" fill="#2a1a10"/><circle cx="19" cy="9.6" r="3.4" fill="#2a1a10"/><circle cx="29" cy="9.6" r="3.4" fill="#2a1a10"/>`,
+agr:bd("#f1ead8")+`<path d="M6 48l7-17 6 5v12zM42 48l-7-17-6 5v12z" fill="#5a4a3a"/>`+hd("#b8805a")+fc+mus("#150d08")+`<path d="M14.5 15c0-9 19-9 19 0z" fill="#4a4f57"/><path d="M13.5 15h21l5 2.4h-26z" fill="#33373d"/>`,
+raf:bd("#2b2020")+`<path d="M19 31l5 9 5-9z" fill="#f4f4f4"/><rect x="29" y="37" width="12" height="9" rx="1" fill="#2f5fb0"/><rect x="31" y="39.4" width="8" height="1.6" fill="#ffe08a"/>`+hd("#b27a48")+`<path d="M14.5 18c-1-11 19-11 19 0-4-3-15-3-19 0z" fill="#150d08"/>`+fc+mus("#150d08"),
+vic:bd("#d0742e")+`<path d="M4 44h40M5 40h38M7 36h34" stroke="#2aa6a6" stroke-width="2"/><path d="M4 47.4h40" stroke="#f0b73e" stroke-width="2"/><path d="M17 31l7 7 7-7z" fill="#f4f4f4"/>`+hd("#a8703f")+fc+`<path d="M13.6 19C12 7 36 7 34.4 19c-1-4-2-6-5-7-2 2-8 2-10 0-3 1-4 3-5 7z" fill="#150d08"/>`+`<path d="M19.5 23.8q4.5-2.2 9 0q-4.5 1-9 0z" fill="#150d08"/>`,
+mel:bd("#2e2a26")+`<path d="M18 31l6 7 6-7z" fill="#f4f4f4"/><path d="M20.6 38.4l3.4-2 3.4 2-3.4 2z" fill="#8c2f2f"/><rect x="33" y="38" width="10" height="8" rx="1" fill="#7a2f2f"/>`+hd("#c68a56")+`<path d="M20.5 27.6c0 6 7 6 7 0-1.6 1.6-5.4 1.6-7 0z" fill="#20130b"/>`+fc+mus("#20130b")+`<path d="M14.5 19c-1-11 19-11 19 0-3-4-8-5-14-2z" fill="#20130b"/>`,
+mos:bd("#222")+`<path d="M18 31l6 7 6-7z" fill="#f4f4f4"/><path d="M23 36h2l1 9-2 2-2-2z" fill="#4a4a6a"/>`+hd("#eac9a4")+beard("#ecedf2")+fc+mus("#ecedf2")+`<path d="M14 20c-3-12 23-12 20 0-3-6-17-6-20 0z" fill="#ecedf2"/>`,
+mar:bd("#2b3140")+`<path d="M18 31l6 7 6-7z" fill="#f4f4f4"/><path d="M23 36h2l1 9-2 2-2-2z" fill="#c9403a"/>`+hd("#b27a48")+fc+mus("#150d08")+`<path d="M14.5 18c-1-11 19-11 19 0-5-4-13-4-19 0z" fill="#150d08"/><circle cx="20.3" cy="20.5" r="3.7" fill="none" stroke="#222" stroke-width="1.2"/><circle cx="27.7" cy="20.5" r="3.7" fill="none" stroke="#222" stroke-width="1.2"/><path d="M24 20.2h0" stroke="#222" stroke-width="1.2"/>`});
+const T={};[...TEAMS,...PEOPLE].forEach(t=>T[t[0]]={n:t[1],d:t[2],c:t[3]});
+$("defs").insertAdjacentHTML("beforeend",Object.keys(FIG).map(k=>`<symbol id="p-${k}" viewBox="0 0 48 48">${FIG[k]}</symbol>`).join(""));
+let mh="";for(let x=8;x<260;x+=15)mh+=`<circle cx="${x}" cy="213" r="7" fill="#f08a1c"/><circle cx="${x}" cy="213" r="3.4" fill="#ffd24a"/>`;$("mari").innerHTML=mh;
+const coin=(id,c="")=>`<span class="coin ${c}" style="--pc:${T[id].c}"><svg viewBox="0 0 48 48"><use href="#p-${id}"/></svg></span>`;
+const setCoin=(el,id)=>{el.style.setProperty("--pc",T[id].c);el.innerHTML=`<svg viewBox="0 0 48 48"><use href="#p-${id}"/></svg>`};
+const ERAS=[["Raíces pioneras","i-wagon",0,8],["Primeros conversos","i-book",8,24],["Revolución y mártires","i-sombrero",24,38],["Tercera Convención","i-scale",38,56],["Templos y crecimiento","i-temple",56,999]];
+
+
+/* ---- Tablero ---- */
+const NT=28,VW=1000,VH=640;
+const WP=[[70,560],[230,588],[400,548],[570,582],[740,548],[880,562],[945,478],[880,400],[720,372],[540,412],[360,372],[180,408],[70,350],[55,265],[140,205],[300,238],[460,192],[610,222],[730,200],[860,246]];
+let BT=[];
+const rng=a=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+function crp(p){let d=`M${p[0][0]} ${p[0][1]}`;for(let i=0;i<p.length-1;i++){const a=p[i-1]||p[i],b=p[i],c=p[i+1],e=p[i+2]||c;d+=` C${(b[0]+(c[0]-a[0])/6).toFixed(1)} ${(b[1]+(c[1]-a[1])/6).toFixed(1)} ${(c[0]-(e[0]-b[0])/6).toFixed(1)} ${(c[1]-(e[1]-b[1])/6).toFixed(1)} ${c[0]} ${c[1]}`}return d}
+function buildScene(){
+ const road=crp(WP),g=k=>`<linearGradient id="gE${k}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--e${k}-hi)"/><stop offset=".55" style="stop-color:var(--e${k})"/><stop offset="1" style="stop-color:var(--e${k}-lo)"/></linearGradient>`;
+ const cols=["#e84a7f","#f0b73e","#2aa6a6","#8b5dc4","#f08a1c","#5fd3a0"];
+ let flags="";for(let i=0;i<20;i++){const x=i*50+2;flags+=`<path d="M${x} 6h46v28l-23-10-23 10z" fill="${cols[i%6]}" opacity=".92"/><circle cx="${x+23}" cy="14" r="3.2" fill="#12093a"/><path d="M${x+12} 6v6M${x+34} 6v6" stroke="#12093a" stroke-width="2.4"/>`}
+ $("scene").innerHTML=`<defs><linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#12093a"/><stop offset=".5" stop-color="#3a1f6e"/><stop offset="1" stop-color="#a8503a"/></linearGradient><linearGradient id="gGr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b4a30"/><stop offset=".5" stop-color="#4a2f26"/><stop offset="1" stop-color="#2a1a1e"/></linearGradient><linearGradient id="gRd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1d69a"/><stop offset="1" stop-color="#c79b55"/></linearGradient>${[0,1,2,3,4].map(g).join("")}</defs>
+ <rect width="1000" height="640" fill="url(#gSky)"/><g id="gSt"></g>
+ <path d="M0 200L90 150 170 190 262 140 360 188 452 160 540 196 640 150 730 190V230H0z" fill="#2a1a52" opacity=".85"/>
+ <path d="M0 190Q130 150 260 184T530 182T800 176T1000 188V640H0z" fill="url(#gGr)"/>
+ <g id="gDc"></g><use href="#scene-vol" x="735" y="12" width="260" height="226"/>
+ <path d="${road}" transform="translate(0 6)" fill="none" stroke="#150a14" stroke-opacity=".5" stroke-width="60" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="${road}" fill="none" stroke="#6a3b1c" stroke-width="56" stroke-linecap="round" stroke-linejoin="round"/>
+ <path id="rd" d="${road}" fill="none" stroke="url(#gRd)" stroke-width="48" stroke-linecap="round" stroke-linejoin="round"/>
+ <path d="${road}" fill="none" stroke="#fff3cb" stroke-opacity=".6" stroke-width="2.4" stroke-dasharray="1 13" stroke-linecap="round"/>
+ <path d="M0 5H1000" stroke="#f0b73e" stroke-width="2"/>${flags}<g id="gTl"></g><g id="gLb" font-family="Marcellus,Georgia,serif" text-anchor="middle"></g><circle id="ring" r="45" fill="none" stroke="#fff0b8" stroke-width="3.2" stroke-dasharray="3 7" cx="-100" cy="-100"/>`;
+ const rd=$("rd"),L=rd.getTotalLength(),sm=[];for(let s=0;s<=300;s++){const p=rd.getPointAtLength(L*s/300);sm.push([p.x,p.y])}
+ BT=[];for(let i=0;i<NT;i++){const p=rd.getPointAtLength(L*i/(NT-1)),x=+p.x.toFixed(1),y=+p.y.toFixed(1);
+  if(i==0)BT.push({x,y,t:"s",g:"url(#gE0)",ic:"i-flag",l:"Salida"});else if(i==NT-1)BT.push({x,y,t:"f",g:"url(#gE2)",ic:"i-vol",l:"Popocatépetl"});
+  else{const e=(i-1)%5;BT.push({x,y,t:"e",e,g:`url(#gE${e})`,ic:ERAS[e][1],l:ERAS[e][0]})}}
+ const r=rng(11);let st="";for(let i=0;i<70;i++)st+=`<circle cx="${(r()*1000).toFixed(0)}" cy="${(40+r()*120).toFixed(0)}" r="${(.5+r()*1.1).toFixed(1)}" fill="#fff6d6" opacity="${(.3+r()*.6).toFixed(2)}"/>`;$("gSt").innerHTML=st;
+ const dc=[];let tr=0;while(dc.length<60&&tr++<900){const x=20+r()*960,y=200+r()*430;if(x>720&&y<300)continue;if(!sm.every(([a,b])=>Math.hypot(a-x,b-y)>62))continue;if(dc.some(d=>Math.hypot(d.x-x,(d.y-y)*1.3)<30))continue;dc.push({x,y,k:r()<.55?"n":"f",s:.7+r()*.7})}
+ dc.sort((a,b)=>a.y-b.y);
+ $("gDc").innerHTML=dc.map(d=>d.k=="n"?`<g transform="translate(${d.x.toFixed(0)} ${d.y.toFixed(0)}) scale(${d.s.toFixed(2)})"><ellipse cy="1" rx="14" ry="3" fill="#150a14" opacity=".4"/><ellipse cy="-14" rx="7" ry="13" fill="#2f7d4a"/><ellipse cx="-9" cy="-27" rx="5.5" ry="9" fill="#3a9158" transform="rotate(-25 -9 -27)"/><ellipse cx="9" cy="-25" rx="5.5" ry="9" fill="#3a9158" transform="rotate(25 9 -25)"/><circle cx="-10" cy="-35" r="1.8" fill="#ff6b81"/><circle cx="10" cy="-33" r="1.8" fill="#ff6b81"/></g>`:`<g transform="translate(${d.x.toFixed(0)} ${d.y.toFixed(0)}) scale(${d.s.toFixed(2)})"><path d="M0 0V-12" stroke="#2f7d4a" stroke-width="2"/><circle cy="-15" r="7" fill="#f08a1c"/><circle cy="-15" r="3.6" fill="#ffd24a"/></g>`).join("");
+ $("gTl").innerHTML=BT.map((t,i)=>{const m=t.t!="e";return`<g class="tile" transform="translate(${t.x} ${t.y})"><title>${m?t.l:"Casilla "+i+": "+t.l}</title><circle r="39" cy="5" fill="#150a14" opacity=".4"/><circle r="35" fill="url(#gRim)"/><circle r="29.5" fill="${t.g}"/><circle r="26" fill="none" stroke="#fff4d0" stroke-opacity=".4"/><use href="#${t.ic}" x="-17" y="-17" width="34" height="34" style="color:#fff4d0"/>${m?"":`<circle cx="25" cy="25" r="10.5" fill="#150e3a" stroke="#f0b73e" stroke-width="1.6"/><text x="25" y="29.6" font-size="13" fill="#ffe08a" text-anchor="middle">${i}</text>`}</g>`}).join("");
+ const tg=(x,y,w,s)=>`<g transform="translate(${x} ${y})"><rect x="${-w/2}" y="-14" width="${w}" height="26" rx="13" fill="#150e3a" fill-opacity=".88" stroke="#f0b73e" stroke-opacity=".7"/><text y="5" font-size="15" fill="#ffe08a">${s}</text></g>`;
+ $("gLb").innerHTML=tg(BT[0].x,BT[0].y+58,70,"1846")+tg(BT[NT-1].x-60,BT[NT-1].y+58,150,"Cumbre · 1881");
+ $("legend").innerHTML=ERAS.map((e,i)=>`<span class="v${i}"><i><svg class="ico"><use href="#${e[1]}"/></svg></i>${e[0]}</span>`).join("")}
+/* ---- Dado ---- */
+const PIPS={1:[5],2:[1,9],3:[1,5,9],4:[1,3,7,9],5:[1,3,5,7,9],6:[1,3,4,6,7,9]},ROT={1:"rotateX(0) rotateY(0)",6:"rotateY(-180deg)",2:"rotateY(90deg)",5:"rotateY(-90deg)",3:"rotateX(-90deg)",4:"rotateX(90deg)"};
+function buildDice(){$("dice").innerHTML=[1,6,2,5,3,4].map(v=>`<div class="face f${v}">${PIPS[v].map(c=>`<span class="pip" style="grid-area:${Math.ceil(c/3)}/${(c-1)%3+1}"></span>`).join("")}</div>`).join("");$("dice").style.transform=ROT[1]}
+/* ---- Juego ---- */
+let mode="I",selI=["plo","raf"],selE=["lam","nef"],P=[],cur=0,busy=false,pq=null,logs=[];const used={};
+const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+function setMode(m){mode=m;renderTeams()}
+function renderTeams(){const L=mode=="I"?PEOPLE:TEAMS,s=mode=="I"?selI:selE;document.querySelectorAll("#modeSeg button").forEach(b=>b.classList.toggle("on",b.dataset.m==mode));
+ $("selLab").textContent=mode=="I"?"Elige de 2 a 6 personajes":"Elige de 2 a 6 equipos";$("selHint").textContent=mode=="I"?"Cada jugador es un personaje de la historia de la Iglesia en México.":"Cada equipo tiene su propio personaje.";
+ $("teams").innerHTML=L.map(t=>`<button type="button" class="team ${s.includes(t[0])?"on":""}" onclick="tog('${t[0]}')" aria-pressed="${s.includes(t[0])}">${coin(t[0],"sm")}<span><b>${t[1]}</b><small>${t[2]}</small></span></button>`).join("");$("go").disabled=s.length<2}
+function tog(id){const s=mode=="I"?selI:selE,i=s.indexOf(id);if(i>=0)s.splice(i,1);else if(s.length<6)s.push(id);renderTeams()}
+function say(h){const t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});logs.unshift(`<p><small>${t}</small> ${h}</p>`);$("log").innerHTML=logs.join("")}
+function start(){ac();startMusic();P=(mode=="I"?selI:selE).map(id=>({id,pos:0,ok:0}));cur=0;busy=false;logs=[];$("setup").classList.add("hidden");$("pawns").innerHTML="";say(`Comienza la odisea con ${P.length} ${mode=="I"?"jugadores":"equipos"}. ¡Rumbo al Popocatépetl!`);ui();pawns()}
+function ui(){const a=P[cur];setCoin($("aCoin"),a.id);$("aName").textContent=T[a.id].n;$("ring").setAttribute("cx",BT[a.pos].x);$("ring").setAttribute("cy",BT[a.pos].y);
+ $("pl").innerHTML=P.map((p,i)=>`<div class="pc ${i==cur?"on":""}">${coin(p.id,"sm")}<div><div class="nm">${T[p.id].n}</div><div class="at">${p.pos==0?"En la salida":p.pos==NT-1?"En la cumbre":"Casilla "+p.pos+" · "+BT[p.pos].l}</div></div><div class="pt">${p.ok}<small>aciertos</small></div><div class="trk"><b style="width:${p.pos/(NT-1)*100}%"></b></div></div>`).join("")}
+function pawns(f){const L=$("pawns"),g={};P.forEach(p=>(g[p.pos]=g[p.pos]||[]).push(p));
+ P.forEach((p,i)=>{let el=document.getElementById("pw"+p.id);if(!el){el=document.createElement("div");el.id="pw"+p.id;el.innerHTML=`<svg viewBox="0 0 40 52"><path d="M20 51C20 51 3 34 3 19a17 17 0 0 1 34 0c0 15-17 32-17 32z" fill="${T[p.id].c}" stroke="#ffe08a" stroke-width="2"/><circle cx="20" cy="19" r="14" fill="${T[p.id].c}"/><g clip-path="url(#pinClip)"><use href="#p-${p.id}" x="4" y="3" width="32" height="32"/></g></svg>`;L.appendChild(el)}
+  el.className="pawn"+(i==cur?" active":"");const k=g[p.pos].indexOf(p),dx=(k-(g[p.pos].length-1)/2)*26;el.style.left=((BT[p.pos].x+dx)/VW*100)+"%";el.style.top=((BT[p.pos].y-4)/VH*100)+"%"});
+ if(f){const s=$("bs");if(s.scrollWidth>s.clientWidth+2)s.scrollTo({left:BT[f.pos].x/VW*$("board").offsetWidth-s.clientWidth/2,behavior:"smooth"})}}
+function rollDice(){if(busy||!P.length||!$("qModal").classList.contains("hidden"))return;busy=true;rattle();$("rollBtn").disabled=true;const n=1+Math.random()*6|0,d=$("dice");
+ d.style.transform=`rotateX(${(2+Math.random()*3|0)*360}deg) rotateY(${(2+Math.random()*3|0)*360}deg)`;
+ setTimeout(()=>{d.style.transform=ROT[n];setTimeout(()=>{busy=false;$("rollBtn").disabled=false;say(`<strong>${T[P[cur].id].n}</strong> sacó un <strong>${n}</strong>.`);ask(n)},1300)},800)}
+function card(e){const pool=[];for(let i=ERAS[e][2];i<Math.min(C.length,ERAS[e][3]);i++)pool.push(i);used[e]=used[e]||new Set();let d=pool.filter(i=>!used[e].has(i));if(!d.length){used[e].clear();d=pool}const i=d[Math.random()*d.length|0];used[e].add(i);return C[i]}
+function ask(n){const p=P[cur],t=BT[Math.min(p.pos+n,NT-1)];const e=t.t=="e"?t.e:Math.random()*5|0,c=card(e);
+ pq={q:c[0],ans:c[1],opts:sh(c.slice(1)),n,e,sel:null};
+ $("qp").className="panel qm v"+e;$("qi").innerHTML=`<use href="#${ERAS[e][1]}"/>`;$("qe").textContent=ERAS[e][0];$("qr").textContent=n;setCoin($("qc"),p.id);$("qn").textContent=T[p.id].n+" responde";$("qt").textContent=pq.q;
+ $("opts").innerHTML="";pq.opts.forEach((o,i)=>{const b=document.createElement("button");b.type="button";b.className="opt";b.innerHTML=`<span class="l">${"ABC"[i]}</span><span></span>`;b.lastChild.textContent=o;b.onclick=()=>pick(i);$("opts").appendChild(b)});
+ $("ex").classList.add("hidden");$("cont").classList.add("hidden");$("qModal").classList.remove("hidden");$("qModal").scrollTop=0}
+function pick(i){if(pq.sel!==null)return;pq.sel=i;const ok=pq.opts[i]==pq.ans;pq.ok=ok;
+ [...$("opts").children].forEach((b,k)=>{b.disabled=true;if(pq.opts[k]==pq.ans)b.classList.add("right");else if(k==i)b.classList.add("wrong")});
+ $("ex").className="ex "+(ok?"ok":"no");$("exi").innerHTML=`<use href="#${ok?"u-check":"u-cross"}"/>`;$("ext").textContent=ok?`¡Correcto! Avanzas ${pq.n} casillas.`:"Incorrecto. Te quedas en tu casilla.";$("exb").textContent=ok?"":"Respuesta correcta: "+pq.ans;
+ if(ok)tone([523,659,784,1047]);else tone([247,185]);$("cont").classList.remove("hidden")}
+let soundOn=true,musicOn=true,AC=null,mG=null,mT=null,mO=[];
+function ac(){try{if(!AC)AC=new(window.AudioContext||window.webkitAudioContext)();if(AC.state=="suspended")AC.resume()}catch(e){}return AC}
+function tone(a){if(!soundOn)return;const c=ac();if(!c)return;a.forEach((f,i)=>setTimeout(()=>{const o=c.createOscillator(),g=c.createGain();o.frequency.value=f;o.type="triangle";g.gain.setValueAtTime(.1,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.25);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+.25)},i*110))}
+function rattle(){if(!soundOn)return;const c=ac();if(!c)return;const len=c.sampleRate*.06|0,buf=c.createBuffer(1,len,c.sampleRate),d=buf.getChannelData(0);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2);
+ const hit=(t,v,f)=>{const s=c.createBufferSource();s.buffer=buf;const bp=c.createBiquadFilter();bp.type="bandpass";bp.frequency.value=f;bp.Q.value=1.2;const g=c.createGain();g.gain.value=v;s.connect(bp);bp.connect(g);g.connect(c.destination);s.start(t)};
+ const t0=c.currentTime;let t=0;while(t<1.9){hit(t0+t,.55*(1-t/2.2)+.1,1800+Math.random()*2200);t+=.045+Math.random()*.06+t*.05}
+ hit(t0+1.95,.9,900);hit(t0+2.06,.5,1400);const o=c.createOscillator(),g=c.createGain();o.frequency.setValueAtTime(140,t0+1.95);o.frequency.exponentialRampToValueAtTime(60,t0+2.12);g.gain.setValueAtTime(.25,t0+1.95);g.gain.exponentialRampToValueAtTime(.001,t0+2.15);o.connect(g);g.connect(c.destination);o.start(t0+1.95);o.stop(t0+2.2)}
+/* Himno 88 «Placentero nos es trabajar» (soprano, Sol mayor, 4/4, negra = 108) */
+const HY="G4:.75 A4:.25 B4:1 A4:.5 G4:.5 A4:1 G4:.75 E4:.25 D4:3 G4:.75 A4:.25 B4:1 B4:.75 B4:.25 D5:1 D5:.75 B4:.25 A4:3 G4:.75 A4:.25 B4:1 A4:.5 G4:.5 A4:1 G4:.75 E4:.25 D4:3 G4:.75 A4:.25 B4:1 A4:.5 G4:.5 A4:1 G4:.5 F#4:.5 G4:3 B4:.75 C5:.25 D5:3 D5:.75 B4:.25 A4:3 A4:.75 B4:.25 C5:1 C5:.5 C5:.5 C5:1 B4:.5 A4:.5 B4:3 B4:.75 C5:.25 D5:3 B4:.75 A4:.25 G4:3 F#4:.5 E4:.5 D4:1 G4:.5 B4:.5 A4:1 G4:.5 F#4:.5 G4:3 R:3".split(" ").map(s=>s.split(":")),SP=60/108,NS={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+const fq=n=>{const m=n.match(/^([A-G])(#?)(\d)$/);return 440*Math.pow(2,(12*(+m[3]+1)+NS[m[1]]+(m[2]?1:0)-69)/12)};
+function sched(){if(!AC||!mG)return;let t=AC.currentTime+.1;const t0=t;mO=[];HY.forEach(([n,b])=>{const d=b*SP;if(n!="R")[["triangle",1,1],["sine",.5,.55]].forEach(([ty,m,v])=>{const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.value=fq(n)*m;g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+.03);g.gain.exponentialRampToValueAtTime(.001,t+d*.97);o.connect(g);g.connect(mG);o.start(t);o.stop(t+d);mO.push(o)});t+=d});mT=setTimeout(sched,(t-t0)*1000-150)}
+function startMusic(){if(!musicOn||!soundOn)return;stopMusic();const c=ac();if(!c)return;mG=c.createGain();mG.gain.value=.06;mG.connect(c.destination);sched()}
+function stopMusic(){clearTimeout(mT);mT=null;mO.forEach(o=>{try{o.stop()}catch(e){}});mO=[];if(mG){try{mG.disconnect()}catch(e){}mG=null}}
+function icons(){$("sndI").innerHTML=`<use href="#${soundOn?"u-sound":"u-mute"}"/>`;$("sndT").textContent=soundOn?"Sonido":"Sin sonido";$("musI").innerHTML=`<use href="#${musicOn&&soundOn?"u-music":"u-music-off"}"/>`;$("musT").textContent=musicOn?"Himno":"Sin himno"}
+function toggleSound(){soundOn=!soundOn;icons();if(soundOn&&musicOn&&P.length&&$("winModal").classList.contains("hidden"))startMusic();else stopMusic()}
+function toggleMusic(){musicOn=!musicOn;icons();if(musicOn&&soundOn&&P.length&&$("winModal").classList.contains("hidden"))startMusic();else stopMusic()}
+function afterQ(){$("qModal").classList.add("hidden");const p=P[cur];if(pq.ok){p.ok++;let n=pq.n;const iv=setInterval(()=>{p.pos++;pawns(p);ui();if(--n==0||p.pos>=NT-1){clearInterval(iv);arrive(p)}},280)}else{say(`<strong>${T[p.id].n}</strong> falló y se queda en la casilla ${p.pos}.`);next()}}
+function arrive(p){say(`<strong>${T[p.id].n}</strong> llegó a la casilla ${p.pos} (${BT[p.pos].l}).`);if(p.pos>=NT-1)return victory(p);next()}
+function next(){cur=(cur+1)%P.length;ui();pawns(P[cur])}
+function victory(p){stopMusic();tone([523,659,784,1047,1319]);setCoin($("wc"),p.id);$("wt").textContent="¡"+T[p.id].n+" gana la odisea!";say(`<strong>¡${T[p.id].n} llegó a la cumbre!</strong>`);$("winModal").classList.remove("hidden");
+ if(typeof confetti=="function"){const c=["#ffe08a","#f0b73e","#e84a7f","#2aa6a6","#8b5dc4","#f08a1c"];confetti({particleCount:140,spread:80,origin:{y:.6},colors:c});setTimeout(()=>confetti({particleCount:90,angle:60,spread:70,origin:{x:0,y:.7},colors:c}),250);setTimeout(()=>confetti({particleCount:90,angle:120,spread:70,origin:{x:1,y:.7},colors:c}),400)}}
+function restart(){P=[];cur=0;busy=false;selI=["plo","raf"];selE=["lam","nef"];mode="I";stopMusic();["restartModal","winModal","qModal"].forEach(i=>$(i).classList.add("hidden"));$("pawns").innerHTML="";$("pl").innerHTML="";logs=[];$("log").innerHTML="";$("dice").style.transform=ROT[1];$("rollBtn").disabled=false;$("ring").setAttribute("cx",-100);renderTeams();$("setup").classList.remove("hidden");$("bs").scrollTo({left:0})}
+window.addEventListener("load",()=>{buildScene();buildDice();renderTeams();$("pl").innerHTML="";$("aName").textContent="—"});
+</script></body></html>
