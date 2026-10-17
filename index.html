@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Odisea de la Iglesia en México</title>
+<title>Odisea de la Historia de la Iglesia en México</title>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;0,800;1,400&family=Marcellus&display=swap" rel="stylesheet">
 <style>
@@ -138,7 +138,7 @@ footer{text-align:center;color:var(--mist2);font-size:14px;font-style:italic;pad
 <symbol id="u-music-off" viewBox="0 0 24 24"><path d="M9 18V6l10-2v12" fill="none" stroke="currentColor" stroke-width="1.8" opacity=".55"/><circle cx="6.5" cy="18" r="2.5" fill="currentColor" opacity=".55"/><circle cx="16.5" cy="16" r="2.5" fill="currentColor" opacity=".55"/><path d="M3 3l18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
 </defs></svg>
 <div class="app">
-<header class="panel top"><div class="brand"><div class="crest"><svg class="ico"><use href="#i-vol"/></svg></div><div><h1>Odisea de la Iglesia en México</h1><p>Del carromato pionero a la cumbre del Popocatépetl</p></div></div>
+<header class="panel top"><div class="brand"><div class="crest"><svg class="ico"><use href="#i-vol"/></svg></div><div><h1>Odisea de la Historia de la Iglesia en México</h1><p>Del carromato pionero a la cumbre del Popocatépetl</p></div></div>
 <div class="tb"><button type="button" class="btn-ghost" onclick="toggleSound()" aria-label="Activar o apagar efectos de sonido"><svg class="ico" id="sndI"><use href="#u-sound"/></svg><span class="bl" id="sndT">Sonido</span></button><button type="button" class="btn-ghost" onclick="toggleMusic()" aria-label="Activar o silenciar el himno"><svg class="ico" id="musI"><use href="#u-music"/></svg><span class="bl" id="musT">Himno</span></button><button type="button" class="btn-ghost" onclick="$('restartModal').classList.remove('hidden')" aria-label="Reiniciar"><svg class="ico"><use href="#u-restart"/></svg><span class="bl">Reiniciar</span></button></div></header>
 <main class="layout">
 <section><div class="panel bw"><div class="bs" id="bs"><div class="board" id="board"><svg class="scene" id="scene" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Tablero: camino dorado hasta el volcán Popocatépetl"></svg><div class="pawns" id="pawns"></div></div></div><div class="legend" id="legend"></div></div></section>
@@ -151,7 +151,7 @@ footer{text-align:center;color:var(--mist2);font-size:14px;font-style:italic;pad
 </aside></main>
 <footer>Trivia de historia de la Iglesia en México · responde bien para avanzar<br>Himno de fondo: «Placentero nos es trabajar» (#88), letra de Andrés C. González, música de Joseph P. Webster</footer></div>
 <div id="setup" class="overlay"><div class="panel setup"><div class="hero"><svg viewBox="0 0 260 220"><use href="#scene-vol"/></svg></div>
-<div class="titles"><h2>Odisea de la Iglesia en México</h2><p>Del carromato pionero a la cumbre del Popocatépetl</p></div>
+<div class="titles"><h2>Odisea de la Historia de la Iglesia en México</h2><p>Del carromato pionero a la cumbre del Popocatépetl</p></div>
 <div class="form"><div><span class="lab">Modo de juego</span><div class="seg" id="modeSeg"><button type="button" data-m="I" class="on" onclick="setMode('I')">Individual</button><button type="button" data-m="E" onclick="setMode('E')">Por equipos</button></div></div><div><span class="lab" id="selLab"></span><p class="hint" id="selHint"></p><div class="teams" id="teams"></div></div>
 <button type="button" id="go" class="btn-gold" onclick="start()" disabled><svg class="ico"><use href="#i-wagon"/></svg>Comenzar la odisea</button></div></div></div>
 <div id="qModal" class="overlay hidden"><div class="panel qm" id="qp"><div class="qband"><div class="vn"><svg class="ico" id="qi"></svg><span id="qe"></span></div><div class="rl">Dado: <b id="qr"></b> casillas</div></div>
